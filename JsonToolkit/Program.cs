@@ -27,14 +27,13 @@ namespace JsonToolkit
 
     public class MyCustomApplicationContext : ApplicationContext
     {
-        
-        private NotifyIcon trayIcon;
+        private readonly NotifyIcon _trayIcon;
 
         public MyCustomApplicationContext()
         {
             
             // Initialize Tray Icon
-            trayIcon = new NotifyIcon()
+            _trayIcon = new NotifyIcon()
             {
                 Icon = Resources.json_icon,
                 ContextMenu = new ContextMenu(new MenuItem[] {
@@ -43,20 +42,20 @@ namespace JsonToolkit
                 Visible = true
             };
 
-            trayIcon.Text = "This is the tooltip";
-            trayIcon.ContextMenu = new ContextMenu();
+            _trayIcon.Text = "This is the tooltip";
+            _trayIcon.ContextMenu = new ContextMenu();
 
             var menuParseJson = new MenuItem("Parse Json Clipboard", new EventHandler(OnParseJson_Click));
             var menuExit = new MenuItem("Exit", new EventHandler(Exit));
 
-            trayIcon.ContextMenu.MenuItems.Add(menuParseJson);
-            trayIcon.ContextMenu.MenuItems.Add(menuExit);
+            _trayIcon.ContextMenu.MenuItems.Add(menuParseJson);
+            _trayIcon.ContextMenu.MenuItems.Add(menuExit);
         }
 
         void Exit(object sender, EventArgs e)
         {
             // Hide tray icon, otherwise it will remain shown until user mouses over it
-            trayIcon.Visible = false;
+            _trayIcon.Visible = false;
 
             Application.Exit();
         }

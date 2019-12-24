@@ -20,20 +20,13 @@ namespace JsonToolkit
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
         private PrivateFontCollection _fontCollection = new PrivateFontCollection();
-        private Font DefaultFont
-        {
-            get
-            {
-                return new Font(_fontCollection.Families[0], 11.0f);
-            } 
-        }
+        private Font DefaultFont => new Font(_fontCollection.Families[0], 11.0f);
 
         public MainForm()
         {
             InitializeComponent();
             LoadFont();
-
-            this.txtJson.Font = DefaultFont;
+            ApplyFont();
         }
 
         public void LoadJsonClipboard()
@@ -46,6 +39,7 @@ namespace JsonToolkit
             this.Show();
         }
 
+        // Borrowed from https://stackoverflow.com/a/1956043/1769999
         private void LoadFont()
         {
             Stream fontStream = new MemoryStream(Properties.Resources.Cascadia);
@@ -68,6 +62,17 @@ namespace JsonToolkit
             fontStream.Close();
             //free the unsafe memory
             Marshal.FreeCoTaskMem(data);
+        }
+
+        private void ApplyFont()
+        {
+            foreach (Control x in this.Controls)
+            {
+                if (x is TextBox)
+                {
+                    ((TextBox)x).Font = DefaultFont;
+                }
+            }
         }
     }
 }
